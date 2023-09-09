@@ -6,6 +6,7 @@ int main()
   cout << "------------------------------------------------\n";
   int i = 1, u = 1, sum = 0;
   cout << "\n The perfect numbers between 1 to 500 are: \n";
+  //LOl
   while (i <= 500) //Mientras i sea menor igual que 500 sucedera:
   {
     while (u <= 500) //Sucedera otro mientras, "Mientras u sea menor o igual que 500 sucedera:"
