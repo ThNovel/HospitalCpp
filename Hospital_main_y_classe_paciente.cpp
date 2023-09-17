@@ -1,9 +1,22 @@
+//
+//  main.cpp
+//  hospital
+//  This is the Hospital project code for Intro Computing Science
+//  Created by Fernando and Iker.
+//
+
 #include <iostream>
 #include <vector>
 #include <string>
-
 using namespace std;
 
+// global variables 
+string user_input;
+string password_input;
+string user="root";
+int password= 1234;
+int login_attempt = 0;
+//end of global variables
 class Paciente {
 public:
     // constructos vacio 
@@ -29,6 +42,7 @@ public:
         cout << "------------------------" << endl;
     }
 
+// public class variables
 public:
     string name;
     string gender;
@@ -81,7 +95,7 @@ public:
     }
 
     // Funcion para listar todos los paciente que se han agregado
-    void listPatients() {
+void listPatients() {
         if (persona_paciente.empty()) {
             cout << "No patients in the system." << endl;
             return;
@@ -96,10 +110,38 @@ public:
 public:
     vector<Paciente> persona_paciente;
 };
+// funcion login
+void login(){
+    while (login_attempt<=3)
+    {
+        cout<<"User: ";
+        cin>>user_input;
+        cout<<"Password: ";
+        cin>>password_input;
+        if(user_input == user && password_input == "1234"){
+            cout<<"Success";
+            break;
+        }
+        else{
+            cout<<"Invalid User or Password."<<endl;
+            login_attempt++;
+        }
+        if(login_attempt==3){
+            cout<<"Many failed attempts, muere(figurativamente)."<<endl;
+            exit(0); // Esta es una funcion que para el programa
+            break;
+        }
+    //hasta aca
 
+    }
+}
+// inicio de la clase main
 int main() {
     SistemaPaciente sistema;
 
+    login(); //Aqui sucede primero el Login
+    cout<<"\nLogin succesful"<<endl;
+    
     while (true) {
         cout << "Options:" << endl;
         cout << "1. Add Patient" << endl;
