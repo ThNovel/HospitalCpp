@@ -20,12 +20,17 @@ int login_attempt = 0;
 class Paciente {
 public:
     // constructos vacio 
-    Paciente(string name, string gender, int age, double weight, double height,
-             string allergies, string caseInfo, string conclusion,
-             double moneySpent, double moneyEarned)
-        : name(name), gender(gender), age(age), weight(weight), height(height),
-          allergies(allergies), caseInfo(caseInfo), conclusion(conclusion),
-          moneySpent(moneySpent), moneyEarned(moneyEarned) {}
+    Paciente(string name, string gender, int age, double weight, double height,string allergies, string caseInfo, string conclusion, double moneySpent, double moneyEarned):
+		name(name), 
+		gender(gender), 
+		age(age),
+		weight(weight),
+		height(height),
+        allergies(allergies), 
+		caseInfo(caseInfo), 
+		conclusion(conclusion),
+        moneySpent(moneySpent), 
+		moneyEarned(moneyEarned) {}
 
     // funcion para mostrar la informacion del paciente
     void display() const {
@@ -74,8 +79,10 @@ public:
         cin >> weight;
         cout << "Enter patient's height (cm): ";
         cin >> height;
-        // el get line es una funcion que lee las lineas del input stream al que se le especifica (X,...)
-        // y la razon por que la uso es para que tambien lea los espacios en blanco 
+        /* 
+		el get line es una funcion que lee las lineas del input stream al que se le especifica (X,...)
+        y la razon por que la uso es para que tambien lea los espacios en blanco 
+        */
         cout << "Enter patient's allergies: ";
         getline(cin, allergies);
         cout << "Enter patient's case: ";
@@ -112,7 +119,7 @@ public:
 };
 // funcion login
 void login(){
-    while (login_attempt<=3)
+    while (login_attempt < 3)
     {
         cout<<"User: ";
         cin>>user_input;
@@ -126,14 +133,17 @@ void login(){
             cout<<"Invalid User or Password."<<endl;
             login_attempt++;
         }
-        if(login_attempt==3){
+        // no es necesario el if porque ya tenes la declaracion en la funcion while 
+      /*  if(login_attempt >=3){
             cout<<"Many failed attempts, muere(figurativamente)."<<endl;
-            exit(0); // Esta es una funcion que para el programa
+            exit(0); // Esta es una funcion que para que el programa
             break;
         }
+        */
     //hasta aca
-
     }
+    cout<<"Many failed attempts, muere(figurativamente)."<<endl;
+            exit(0); // Esta es una funcion que para que el programa se apague 
 }
 // inicio de la clase main
 int main() {
@@ -169,4 +179,3 @@ int main() {
 
     return 0;
 }
-
