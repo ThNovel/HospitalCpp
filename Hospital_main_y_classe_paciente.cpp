@@ -16,8 +16,14 @@ string password_input;
 string user="root";
 int password= 1234;
 int login_attempt = 0;
+float earning_box = 0;
 //end of global variables
-
+void gastos_ganancias(double& a, double& b){
+    b = b - a;
+    cout<<"The hospital has really earned: $"<<b<<endl;
+    earning_box = earning_box + b;
+    cout<<"The earning box is: $"<<earning_box<<endl;
+}
 class Paciente {
 public:
     // constructos vacio
@@ -60,6 +66,7 @@ public:
     string conclusion;
     double moneySpent;
     double moneyEarned;
+    double gastos;
 };
 
 class SistemaPaciente {
@@ -94,7 +101,7 @@ public:
         cin >> moneySpent;
         cout << "Enter money earned by the hospital: $";
         cin >> moneyEarned;
-
+        gastos_ganancias(moneySpent, moneyEarned);
         Paciente paciente(name, gender, age, weight, height, allergies, caseInfo, conclusion, moneySpent, moneyEarned);
         // la linea de abajo se encarga de mandar los pacientes al final del vector persona_paciente por medio del metodo push_back
         persona_paciente.push_back(paciente);
@@ -144,6 +151,7 @@ void login(){
     //hasta aca
     }
 }
+
 // inicio de la clase main
 int main() {
     SistemaPaciente sistema;
@@ -155,9 +163,11 @@ int main() {
         cout << "Options:" << endl;
         cout << "1. Add Patient" << endl;
         cout << "2. List Patients" << endl;
+       
         cout << "3. Exit" << endl;
+        cout << "5. Expenses and Earnings "<<endl;
         cout << "Enter your choice: ";
-
+        
         int choice;
         cin >> choice;
 
@@ -170,7 +180,11 @@ int main() {
                 break;
             case 3:
                 cout << "Exiting the system." << endl;
+            case 4:
                 return 0;
+            case 5:
+                cout<<"Las ganancias son; "<<gastos<<endl;
+                break;
             default:
                 cout << "Invalid choice. Please try again." << endl;
         }
