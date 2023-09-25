@@ -19,7 +19,7 @@ int login_attempt = 0;
 float earning_box = 0;
 //end of global variables
 void gastos_ganancias(double& a, double& b){
-    b = b - a;
+    b = b - a; //B = MoneySpent, osea dinero dado por el hospital....
     cout<<"The hospital has really earned: $"<<b<<endl;
     earning_box = earning_box + b;
     cout<<"The earning box is: $"<<earning_box<<endl;
@@ -75,7 +75,7 @@ public:
     void persona() {
         string name, gender, allergies, caseInfo, conclusion;
         int age;
-        double weight, height, moneySpent, moneyEarned;
+        double weight, height, moneySpent, moneyEarned, gastos;
 
         cout << "Enter patient's name: ";
         cin >> name;
@@ -183,7 +183,7 @@ int main() {
             case 4:
                 return 0;
             case 5:
-                cout<<"Las ganancias son; "<<gastos<<endl;
+                cout<<"Las ganancias son; "<<earning_box<<endl;
                 break;
             default:
                 cout << "Invalid choice. Please try again." << endl;
