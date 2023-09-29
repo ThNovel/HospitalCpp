@@ -14,6 +14,8 @@ using namespace std;
 string user_input;
 string password_input;
 string user="root";
+string user_doc = "doc";
+string user_nurse = "nurse";
 int password= 1234;
 int login_attempt = 0;
 float earning_box = 0;
@@ -108,6 +110,10 @@ public:
 
         cout << "Patient added successfully!" << endl;
     }
+/*class SistemaDoctor {
+	public:
+		
+}*/
 
     // Funcion para listar todos los paciente que se han agregado
 void listPatients() {
@@ -131,9 +137,7 @@ void login(){
     {
         cout<<"User: ";
         cin>>user_input;
-        cout<<"Password: ";
-        cin>>password_input;
-        if(user_input == user && password_input == "1234"){
+        if(user_input == user or user_input == user_doc or user_input == user_nurse){
             cout<<"Success";
             break;
         }
@@ -154,23 +158,46 @@ void login(){
 
 // inicio de la clase main
 int main() {
+	int choice;
     SistemaPaciente sistema;
-
-    login(); //Aqui sucede primero el Login
+//Que el paciente haga citas, que el paciente pague, anadir al paciente a la agenda del doctor
+  	login(); //Aqui sucede primero el Login
     cout<<"\nLogin succesful"<<endl;
-    
-    while (true) {
-        cout << "Options:" << endl;
-        cout << "1. Add Patient" << endl;
-        cout << "2. List Patients" << endl;
+    if (user_input == user_nurse or user_input == user_doc)
+	{
+    	while (true) 
+		{
+        	cout << "Options:" << endl;
+        	cout << "1. Add Patient" << endl;
+        	cout << "2. List Patients" << endl;
+        	cout << "3. Exit" << endl;
+        	cin>>choice;
+        	switch (choice) {
+	            case 1:
+	                sistema.persona();
+	                break;
+	            case 2:
+	                sistema.listPatients();
+	                break;
+	            case 3:
+	                cout << "Exiting the system." << endl;
+	            case 4:
+	                return 0;
+	            case 5:
+	                cout<<"Las ganancias son; "<<earning_box<<endl;
+	                break;
+	            default:
+	                cout << "Invalid choice. Please try again." << endl;
+        	}	
+    	}
+	}
        
         cout << "3. Exit" << endl;
         cout << "5. Expenses and Earnings "<<endl;
         cout << "Enter your choice: ";
         
-        int choice;
-        cin >> choice;
-
+    
+/*
         switch (choice) {
             case 1:
                 sistema.persona();
@@ -187,8 +214,8 @@ int main() {
                 break;
             default:
                 cout << "Invalid choice. Please try again." << endl;
-        }
+        }*/
+   	return 0;
     }
 
-    return 0;
-}
+
