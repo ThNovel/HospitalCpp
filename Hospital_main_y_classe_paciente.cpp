@@ -6,6 +6,11 @@ using namespace std;
 
 string user_input;
 string password_input;
+ofstream fout; // write to a file
+ifstream fin; // read from a file
+string pat_name;
+string pat_time;
+string mytext;
 string user = "root";
 string user_doc = "doc";
 string user_nurse = "nurse";
@@ -125,24 +130,34 @@ public:
 };
 
 // Función para gestionar el inicio de sesión
-void login() {
-    while (login_attempt < 3) {
-        cout << "Usuario: ";
-        cin >> user_input;
-        if (user_input == user || user_input == user_doc || user_input == user_nurse) {
-            cout << "Éxito";
+int login(){
+    while (login_attempt < 3)
+    {
+        cout<<"User: ";
+        cin>>user_input;
+        if(user_input == user or user_input == user_doc or user_input == user_nurse){
+            cout<<"Success";
+            return 1;
             break;
+            
         }
-        else {
-            cout << "Usuario o contraseña no válidos." << endl;
+    
+        else{
+            cout<<"Invalid User or Password."<<endl;
             login_attempt++;
         }
-        if (login_attempt >= 3) {
-            cout << "Demasiados intentos fallidos, muere (figurativamente)." << endl;
-            break;
+        // no es necesario el if porque ya tenes la declaracion en la funcion while
+       if(login_attempt >3){
+            cout<<"Many failed attempts, muere (figurativamente)."<<endl;
+             // Esta es una funcion que para que el programa
+            return 0;
+           break;
         }
     }
+        return 0;
+    //hasta aca
 }
+
 
 void savePatientsToFile(const vector<Paciente>& pacientes, const string& filename) {
     ofstream outFile(filename);
@@ -168,19 +183,52 @@ void savePatientsToFile(const vector<Paciente>& pacientes, const string& filenam
 
     outFile.close();
 }
-
+void apps(){
+	fout.open("files/apps.txt", ios::app); 
+	
+	while(fout)
+	{
+		cout<<"Insert the name of the patient; "<<endl;
+		getline(cin, pat_name);
+		if(pat_name=="exit")
+			break;
+		fout<<pat_name<<endl;
+		
+		
+		cout<<"Insert the time of the appointment "<<endl;
+		getline(cin, pat_time);
+		if(pat_time=="exit")
+			break;
+		fout<<pat_time<<endl;
+	}
+	fout.close();
+	
+}
+void seeapps(){
+	fin.open("files/apps.txt");
+	
+	while(getline(fin, mytext))
+	{
+		cout<<"This is from the file: "<<mytext<<endl;
+	}
+	fin.close();
+}
 int main() {
     int choice;
     SistemaPaciente sistema;
-    login();
-    cout << "\nInicio de sesión exitoso" << endl;
-    if (user_input == user_nurse || user_input == user_doc) {
+  
+    int loginvalue = login(); 
+	cout<<"\n"<<loginvalue<< endl;
+  	if (loginvalue == 1 )
+	  {
         while (true) {
             cout << "Opciones:" << endl;
             cout << "1. Agregar Paciente" << endl;
             cout << "2. Listar Pacientes" << endl;
             cout << "3. Salir" << endl;
             cout << "4. Guardar Pacientes en un Archivo" << endl;
+            cout << "5. Hacer cita" << endl;
+            cout << "6. Ver las citas "<<endl;
             cin >> choice;
             switch (choice) {
                 case 1:
@@ -196,17 +244,17 @@ int main() {
                     savePatientsToFile(sistema.persona_paciente, "datos_pacientes.txt");
                     cout << "Los datos de los pacientes se han guardado en 'datos_pacientes.txt'." << endl;
                     break;
+                case 5:
+                	apps();
+                	break;
+                case 6:
+                	seeapps();
+                	break;
                 default:
                     cout << "Opción no válida. Inténtelo de nuevo." << endl;
             }
-        }
-    }
-    /*
-    cout << "3. Salir" << endl;
-    cout << "4. Guardar Pacientes en un Archivo" << endl;
-    cout << "Ingrese su elección: ";
-    */
+        }		
+	  }
     return 0;
 }
-
 
