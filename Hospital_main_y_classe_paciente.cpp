@@ -1,35 +1,30 @@
-//
-//  main.cpp
-//  hospital
-//  This is the Hospital project code for Intro Computing Science
-//  Created by Fernando and Iker.
-//
-
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 using namespace std;
 
-// global variables
 string user_input;
 string password_input;
-string user="root";
+string user = "root";
 string user_doc = "doc";
 string user_nurse = "nurse";
-int password= 1234;
+int password = 1234;
 int login_attempt = 0;
 float earning_box = 0;
-//end of global variables
-void gastos_ganancias(double& a, double& b){
-    b = b - a; //B = MoneySpent, osea dinero dado por el hospital....
-    cout<<"The hospital has really earned: $"<<b<<endl;
+
+// Función para gestionar los gastos y ganancias del hospital
+void gastos_ganancias(double& a, double& b) {
+    b = b - a;
+    cout << "El hospital ha ganado realmente: $" << b << endl;
     earning_box = earning_box + b;
-    cout<<"The earning box is: $"<<earning_box<<endl;
+    cout << "La caja de ganancias es: $" << earning_box << endl;
 }
+
 class Paciente {
 public:
-    // constructos vacio
-    Paciente(string name, string gender, int age, double weight, double height,string allergies, string caseInfo, string conclusion, double moneySpent, double moneyEarned):
+    // Constructor de la clase Paciente
+    Paciente(string name, string gender, int age, double weight, double height, string allergies, string caseInfo, string conclusion, double moneySpent, double moneyEarned) :
         name(name),
         gender(gender),
         age(age),
@@ -41,22 +36,21 @@ public:
         moneySpent(moneySpent),
         moneyEarned(moneyEarned) {}
 
-    // funcion para mostrar la informacion del paciente
+    // Función para mostrar la información del paciente
     void display() const {
-        cout << "Name: " << name << endl;
-        cout << "Gender: " << gender << endl;
-        cout << "Age: " << age << endl;
-        cout << "Weight: " << weight << " kg" << endl;
-        cout << "Height: " << height << " cm" << endl;
-        cout << "Allergies: " << allergies << endl;
-        cout << "Case: " << caseInfo << endl;
-        cout << "Conclusion: " << conclusion << endl;
-        cout << "Money Spent: $" << moneySpent << endl;
-        cout << "Money Earned by Hospital: $" << moneyEarned << endl;
+        cout << "Nombre: " << name << endl;
+        cout << "Género: " << gender << endl;
+        cout << "Edad: " << age << endl;
+        cout << "Peso: " << weight << " kg" << endl;
+        cout << "Altura: " << height << " cm" << endl;
+        cout << "Alergias: " << allergies << endl;
+        cout << "Caso: " << caseInfo << endl;
+        cout << "Conclusión: " << conclusion << endl;
+        cout << "Dinero Gastado: $" << moneySpent << endl;
+        cout << "Dinero Ganado por el Hospital: $" << moneyEarned << endl;
         cout << "------------------------" << endl;
     }
 
-// public class variables
 public:
     string name;
     string gender;
@@ -68,61 +62,59 @@ public:
     string conclusion;
     double moneySpent;
     double moneyEarned;
-    double gastos;
+};
+
+class SistemaCitas {
+public:
+    // Función para gestionar citas
+    void persona() {
+        string cita;
+        cout << "Ingrese una cita: ";
+        getline(cin, cita);
+    }
 };
 
 class SistemaPaciente {
 public:
-    // Funcion para agregar una paciente a la classe paciente
+    // Función para agregar un paciente a la clase Paciente
     void persona() {
         string name, gender, allergies, caseInfo, conclusion;
         int age;
-        double weight, height, moneySpent, moneyEarned, gastos;
-
-        cout << "Enter patient's name: ";
+        double weight, height, moneySpent, moneyEarned;
+        cout << "Ingrese el nombre del paciente: ";
         cin >> name;
-        cout << "Enter patient's gender: ";
+        cout << "Ingrese el género del paciente: ";
         cin >> gender;
-        cout << "Enter patient's age: ";
+        cout << "Ingrese la edad del paciente: ";
         cin >> age;
-        cout << "Enter patient's weight (kg): ";
+        cout << "Ingrese el peso del paciente (kg): ";
         cin >> weight;
-        cout << "Enter patient's height (cm): ";
+        cout << "Ingrese la altura del paciente (cm): ";
         cin >> height;
-        /*
-        el get line es una funcion que lee las lineas del input stream al que se le especifica (X,...)
-        y la razon por que la uso es para que tambien lea los espacios en blanco
-        */
-        cout << "Enter patient's allergies: ";
+        cout << "Ingrese las alergias del paciente: ";
         getline(cin, allergies);
-        cout << "Enter patient's case: ";
+        cout << "Ingrese el caso del paciente: ";
         getline(cin, caseInfo);
-        cout << "Enter conclusion of the case: ";
+        cout << "Ingrese la conclusión del caso: ";
         getline(cin, conclusion);
-        cout << "Enter money spent: $";
+        cout << "Ingrese el dinero gastado: $";
         cin >> moneySpent;
-        cout << "Enter money earned by the hospital: $";
+        cout << "Ingrese el dinero ganado por el hospital: $";
         cin >> moneyEarned;
         gastos_ganancias(moneySpent, moneyEarned);
         Paciente paciente(name, gender, age, weight, height, allergies, caseInfo, conclusion, moneySpent, moneyEarned);
-        // la linea de abajo se encarga de mandar los pacientes al final del vector persona_paciente por medio del metodo push_back
         persona_paciente.push_back(paciente);
-
-        cout << "Patient added successfully!" << endl;
+        cout << "¡Paciente agregado exitosamente!" << endl;
     }
-/*class SistemaDoctor {
-	public:
-		
-}*/
 
-    // Funcion para listar todos los paciente que se han agregado
-void listPatients() {
+    // Función para listar todos los pacientes que se han agregado
+    void listPatients() {
         if (persona_paciente.empty()) {
-            cout << "No patients in the system." << endl;
+            cout << "No hay pacientes en el sistema." << endl;
             return;
         }
 
-        cout << "List of Patients:" << endl;
+        cout << "Lista de Pacientes:" << endl;
         for (const auto& paciente : persona_paciente) {
             paciente.display();
         }
@@ -131,91 +123,90 @@ void listPatients() {
 public:
     vector<Paciente> persona_paciente;
 };
-// funcion login
-void login(){
-    while (login_attempt < 3)
-    {
-        cout<<"User: ";
-        cin>>user_input;
-        if(user_input == user or user_input == user_doc or user_input == user_nurse){
-            cout<<"Success";
+
+// Función para gestionar el inicio de sesión
+void login() {
+    while (login_attempt < 3) {
+        cout << "Usuario: ";
+        cin >> user_input;
+        if (user_input == user || user_input == user_doc || user_input == user_nurse) {
+            cout << "Éxito";
             break;
         }
-        else{
-            cout<<"Invalid User or Password."<<endl;
+        else {
+            cout << "Usuario o contraseña no válidos." << endl;
             login_attempt++;
         }
-        // no es necesario el if porque ya tenes la declaracion en la funcion while
-       if(login_attempt >=3){
-            cout<<"Many failed attempts, muere (figurativamente)."<<endl;
-             // Esta es una funcion que para que el programa
-           break;
+        if (login_attempt >= 3) {
+            cout << "Demasiados intentos fallidos, muere (figurativamente)." << endl;
+            break;
         }
-        
-    //hasta aca
     }
 }
 
-// inicio de la clase main
-int main() {
-	int choice;
-    SistemaPaciente sistema;
-//Que el paciente haga citas, que el paciente pague, anadir al paciente a la agenda del doctor
-  	login(); //Aqui sucede primero el Login
-    cout<<"\nLogin succesful"<<endl;
-    if (user_input == user_nurse or user_input == user_doc)
-	{
-    	while (true) 
-		{
-        	cout << "Options:" << endl;
-        	cout << "1. Add Patient" << endl;
-        	cout << "2. List Patients" << endl;
-        	cout << "3. Exit" << endl;
-        	cin>>choice;
-        	switch (choice) {
-	            case 1:
-	                sistema.persona();
-	                break;
-	            case 2:
-	                sistema.listPatients();
-	                break;
-	            case 3:
-	                cout << "Exiting the system." << endl;
-	            case 4:
-	                return 0;
-	            case 5:
-	                cout<<"Las ganancias son; "<<earning_box<<endl;
-	                break;
-	            default:
-	                cout << "Invalid choice. Please try again." << endl;
-        	}	
-    	}
-	}
-       
-        cout << "3. Exit" << endl;
-        cout << "5. Expenses and Earnings "<<endl;
-        cout << "Enter your choice: ";
-        
-    
-/*
-        switch (choice) {
-            case 1:
-                sistema.persona();
-                break;
-            case 2:
-                sistema.listPatients();
-                break;
-            case 3:
-                cout << "Exiting the system." << endl;
-            case 4:
-                return 0;
-            case 5:
-                cout<<"Las ganancias son; "<<earning_box<<endl;
-                break;
-            default:
-                cout << "Invalid choice. Please try again." << endl;
-        }*/
-   	return 0;
+void savePatientsToFile(const vector<Paciente>& pacientes, const string& filename) {
+    ofstream outFile(filename);
+
+    if (!outFile) {
+        cerr << "Error al abrir el archivo: " << filename << endl;
+        return;
     }
+
+    for (const Paciente& paciente : pacientes) {
+        outFile << "Nombre: " << paciente.name << endl;
+        outFile << "Género: " << paciente.gender << endl;
+        outFile << "Edad: " << paciente.age << endl;
+        outFile << "Peso: " << paciente.weight << " kg" << endl;
+        outFile << "Altura: " << paciente.height << " cm" << endl;
+        outFile << "Alergias: " << paciente.allergies << endl;
+        outFile << "Caso: " << paciente.caseInfo << endl;
+        outFile << "Conclusión: " << paciente.conclusion << endl;
+        outFile << "Dinero Gastado: $" << paciente.moneySpent << endl;
+        outFile << "Dinero Ganado por el Hospital: $" << paciente.moneyEarned << endl;
+        outFile << "------------------------" << endl;
+    }
+
+    outFile.close();
+}
+
+int main() {
+    int choice;
+    SistemaPaciente sistema;
+    login();
+    cout << "\nInicio de sesión exitoso" << endl;
+    if (user_input == user_nurse || user_input == user_doc) {
+        while (true) {
+            cout << "Opciones:" << endl;
+            cout << "1. Agregar Paciente" << endl;
+            cout << "2. Listar Pacientes" << endl;
+            cout << "3. Salir" << endl;
+            cout << "4. Guardar Pacientes en un Archivo" << endl;
+            cin >> choice;
+            switch (choice) {
+                case 1:
+                    sistema.persona();
+                    break;
+                case 2:
+                    sistema.listPatients();
+                    break;
+                case 3:
+                    cout << "Saliendo del sistema." << endl;
+                    return 0;
+                case 4:
+                    savePatientsToFile(sistema.persona_paciente, "datos_pacientes.txt");
+                    cout << "Los datos de los pacientes se han guardado en 'datos_pacientes.txt'." << endl;
+                    break;
+                default:
+                    cout << "Opción no válida. Inténtelo de nuevo." << endl;
+            }
+        }
+    }
+    /*
+    cout << "3. Salir" << endl;
+    cout << "4. Guardar Pacientes en un Archivo" << endl;
+    cout << "Ingrese su elección: ";
+    */
+    return 0;
+}
 
 
