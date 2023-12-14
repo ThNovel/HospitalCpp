@@ -1,0 +1,500 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <Windows.h>
+
+using namespace std;
+
+string user_input;
+string password_input;
+ofstream fout; // write to a file
+ifstream fin; // read from a file
+string pat_name;
+string pat_time;
+string mytext;
+string user = "admin";
+string user_doc = "doctor";
+string user_nurse = "nurse";
+string patient = "patient";
+int password = 1234;
+int login_attempt = 0;
+float earning_box = 0;
+void sep(){
+	cout<<"\n/////////////////////////"<<endl;
+}
+// Función para gestionar los gastos y ganancias del hospital
+void gastos_ganancias(double& a, double& b) {
+    b = b - a;
+  //  cout << "The hospital has earned : $" << b << endl;
+    earning_box = earning_box + b;
+    // cout << "The Total earning box is: $" << earning_box << endl;
+}
+void display_earningbox(){
+	cout<<"The total Earning Box is: "<< earning_box<<endl;
+}
+
+class Paciente {
+public:
+    // Constructor de la clase Paciente
+    Paciente(string name, string gender, int age, double weight, double height, string allergies, string caseInfo, string conclusion, double moneySpent, double moneyEarned) :
+        name(name),
+        gender(gender),
+        age(age),
+        weight(weight),
+        height(height),
+        allergies(allergies),
+        caseInfo(caseInfo),
+        conclusion(conclusion),
+        moneySpent(moneySpent),
+        moneyEarned(moneyEarned) {}
+
+    // Función para mostrar la información del paciente
+    void display() const {
+        cout << "Name: " << name << endl;
+        cout << "Gender: " << gender << endl;
+        cout << "Age: " << age << endl;
+        cout << "Weight: " << weight << " kg" << endl;
+        cout << "Height: " << height << " cm" << endl;
+        cout << "Allergiess: " << allergies << endl;
+        cout << "Case: " << caseInfo << endl;
+        cout << "Conclusion: " << conclusion << endl;
+        cout << "Money Spent: $" << moneySpent << endl;
+      //  cout << "Money earned: $" << moneyEarned << endl;
+        cout << "------------------------" << endl;
+    }
+    
+    string name;
+    string gender;
+    int age;
+    double weight;
+    double height;
+    string allergies;
+    string caseInfo;
+    string conclusion;
+    double moneySpent;
+    double moneyEarned;
+};
+
+class SistemaCitas {
+public:
+    // Función para gestionar citas
+    void persona() {
+        string cita;
+        cout << "Ingrese una cita: ";
+        getline(cin,cita);
+    }
+};
+
+class SistemaPaciente {
+public:
+    // Función para agregar un paciente a la clase Paciente
+    void persona() {
+        string name, allergies, caseInfo, conclusion;
+        string gender;
+        int age ;
+        double weight, height, moneySpent, moneyEarned;
+        
+        cout << "Enter the name of the patient: ";
+		cin>>name;
+		//cin.ignore();
+        cout << "Enter the gender of the patient: ";
+		cin>>gender;
+        //cin.ignore();
+        cout << "Enter the age of the patient: ";
+       // getline(cin,age);
+       	cin>> age;
+        //cin.ignore();
+        cout << "Enter the weight of the patient (kg): ";
+       // getline(cin,weight);
+        cin>> weight;
+        //cin.ignore();
+        cout << "Enter the height of the patient (cm): ";
+        cin>>height;
+        //cin.ignore();
+        cout << "Enter the allergies of the patient: ";
+      	cin>>allergies;
+        //cin.ignore();
+        cout << "Enter the case of the patient: ";
+        cin>>caseInfo;
+        //cin.ignore();
+        cout << "Enter the conclusion of the case: ";
+        cin>>conclusion;
+        //cin.ignore();
+        cout << "Enter the cuantity of money that was spent on the client: $";
+        cin>>moneySpent;
+        //cin.ignore();
+        cout << "Enter the cuantity of money the client spent: $";
+        cin>>moneyEarned;
+        //cin.ignore();
+        gastos_ganancias(moneySpent, moneyEarned);
+        Paciente paciente(name, gender, age, weight, height, allergies, caseInfo, conclusion, moneySpent, moneyEarned);
+        persona_paciente.push_back(paciente);
+        cout << " Patient succesfully added! " << endl;
+    }
+
+    // Función para listar todos los pacientes que se han agregado
+    void listPatients() {
+        if (persona_paciente.empty()) {
+            cout << "Not enough patients in the system." << endl;
+            return;
+        }
+
+        cout << "Patient's list: '" << endl;
+        for (const auto& paciente : persona_paciente) {
+            paciente.display();
+        }
+    }
+
+public:
+    vector<Paciente> persona_paciente;
+};
+
+// Función para gestionar el inicio de sesión
+int login(){
+    while (login_attempt < 3)
+    {
+        cout<<"User: ";
+        getline(cin,user_input);
+        if(user_input == user){
+            cout<<"Success, Welcome Administrator";
+            login_attempt =0;
+            return 1;
+            break;  
+        }
+        if(user_input == user_doc){
+        	cout<<"Welcome Doctor";
+        	login_attempt =0;
+        	return 2;
+        	break;
+		}
+		if(user_input ==user_nurse ){
+			cout<<"Welcome Nurse";
+			login_attempt =0;
+			return 3;
+			break;
+		}
+		if(user_input ==patient){
+			cout<<"Welcome to Mercy Hospital";
+			login_attempt =0;
+			return 4;
+			break;
+			
+		}
+    
+        else{
+            cout<<"Invalid User"<<endl;
+        }
+        // no es necesario el if porque ya tenes la declaracion en la funcion while
+       if(login_attempt >3){
+            cout<<"Many failed attempts, muere (figurativamente)."<<endl;
+             // Esta es una funcion que para que el programa
+            return 0;
+           break;
+        }
+    }
+        return 0;
+  
+}
+  //hasta aca
+
+void savePatientsToFile(const vector<Paciente>& pacientes, const string& filename) {
+    ofstream outFile(filename);
+
+    if (!outFile) {
+        cerr << "Failure trying to open the file. " << filename << endl;
+        return;
+    }
+
+    for (const Paciente& paciente : pacientes) {
+        outFile << "Name: " << paciente.name << endl;
+        outFile << "Gender: " << paciente.gender << endl;
+        outFile << "Age: " << paciente.age << endl;
+        outFile << "Weight: " << paciente.weight << " kg" << endl;
+        outFile << "Height: " << paciente.height << " cm" << endl;
+        outFile << "Allergies: " << paciente.allergies << endl;
+        outFile << "Case: " << paciente.caseInfo << endl;
+        outFile << "Conclusion: " << paciente.conclusion << endl;
+        outFile << "Money the client spent: $" << paciente.moneySpent << endl;
+       	outFile << "Money earned by the hospital: $" << paciente.moneyEarned << endl;
+        outFile << "------------------------" << endl;
+    }
+
+    outFile.close();
+}
+void apps(){
+	
+	fout.open("apps.txt");
+	while(fout){
+		cout<<"Enter the name; "<<endl;
+		cin>>pat_name;
+		if(pat_name=="0")
+			break;
+		fout<<pat_name<<endl;		
+		
+		
+		
+		cout<<"Enter the time; "<<endl;
+		cin>>pat_time;
+		if(pat_time=="0")
+			break;
+		fout<<pat_time<<endl;	
+	}
+	fout.close();
+	
+	/*
+	ofstream outFile(a);
+	if(!outFile){
+		cerr << "Failure trying to open the file : "<<a<<endl;
+	}
+	while(fout)
+	{
+		cout<<"Insert the name of the patient: "<<endl;
+		cin>>pat_name;
+		cin.ignore();
+	//	getline(cin , pat_name);
+	//	cin.ignore(1,'\n');
+		if(pat_name=="exit")
+			break;
+		outFile << pat_name << endl;
+		cout<<"Insert the time of the appointment "<<endl;
+		//getline(cin, pat_time);
+		cin>>pat_time;
+		cin.ignore();
+		if(pat_time=="exit")
+			break;
+		outFile << pat_time << endl;
+	}
+	outFile.close();
+	*/
+}
+void seeapps(){
+	cout<<"This appointments are direct from the hospital."<<endl;
+	fin.open("apps.txt");
+	
+int cont =0;
+		   while(getline(fin,mytext)){
+		if (cont == 0){
+					   cout<<"Name of the patient:"<<mytext<<endl;
+					   cont = 1;
+		}else{
+		   cout<<"Time the appointment has been scheduled:"<<mytext<<endl;
+		   cont = 0;
+	}
+	}
+		fin.close();
+}
+void makeapp(){
+	int pain;
+	string wp; // What happened
+	fout.open("patients_apps.txt");
+	while(fout){
+		cout<<"Enter the your name; "<<endl;
+		cin>>pat_name;
+		if(pat_name=="0")
+			break;
+		fout<<pat_name<<endl;		
+		
+		
+		cout<<"From a scale from 1-10, being 1 not too much pain and 10 unbearable pain:\nWhat would you rate your pain?: "<<endl;
+		cin>>pain;
+		cout<<"Select the hour of time for the appointment: ";
+		cin>>pat_time;
+		if(pat_time=="0")
+			break;
+		fout<<pat_time<<endl;	
+		cout<<"Thank you very much for your choice, in Mercy Hospital the priority is always you."<<endl;
+		break;
+	}
+	fout.close();	
+}
+void read_patients_apps(){
+cout<<"This appointments are from the website..."<<endl;
+fin.open("patients_apps.txt");
+	
+int cont =0;
+		   while(getline(fin,mytext)){
+		if (cont == 0){
+					   cout<<"The patient : ->"<<mytext<<"<- Has made an appointment at : ";
+					   cont = 1;
+		}
+		else{
+		   cout<<""<<mytext<<endl;
+		   cont = 0;
+		}
+	}
+		fin.close();
+}
+int main() {
+    int choice;
+    SistemaPaciente sistema;
+    MessageBox(0,"Starting the program","Message",MB_OK| MB_ICONINFORMATION);
+   while (true){
+    int loginvalue = login(); 
+    
+	//adadmcout<<"\n"<<loginvalue<< endl;
+  	if (loginvalue == 1 )
+	  {
+        	sep();
+            cout << "Options:" << endl;
+            cout << "1. Add patient" << endl;
+            cout << "2. List patients" << endl;
+            cout << "3. Exit" << endl;
+            cout << "4. Save patients to a file: " << endl;
+            cout << "5. Make an appointment" << endl;
+            cout << "6. See the appointments "<<endl;
+            cout << "7. See Earning Box"<<endl;
+            cout << "8. Switch user"<<endl;
+            cin>>choice;
+            switch (choice) {
+                case 1:
+                	sep();
+                    sistema.persona();
+                    break;
+                case 2:
+                	sep();
+                    sistema.listPatients();
+                    break;
+                case 3:
+                	sep();
+                    cout << "Exiting system." << endl;
+                    return 0;
+                case 4:
+                	sep();
+                    savePatientsToFile(sistema.persona_paciente, "datos_pacientes.txt");
+                    cout << "The data of the patient has been succesfully added into 'datos_patients.txt'" << endl;
+                    break;
+                case 5:
+                	sep();
+                	apps();
+                	break;
+                case 6:
+                	sep();
+                	seeapps();
+                	sep();
+                	read_patients_apps();
+                	break;
+                case 7:
+                	sep();
+                	display_earningbox();
+                	break;
+                	
+                	case 8:         
+					   	    MessageBox(0,"Changing User","Message",MB_OK);       		
+                		  loginvalue = login();
+                		break;
+                default:
+                	sep();
+                    cout << "No valid option, try again." << endl;
+                    
+            }
+        	
+	  }
+	 if (loginvalue == 2 )
+	 	{
+        	sep();
+            cout << "Options:" << endl;
+            cout << "1. Add patient" << endl;
+            cout << "2. List patients" << endl;	
+            cout << "3. Save patients to a file: " << endl;
+            cout << "4. Exit" << endl;
+			cout << "5. Switch user" << endl;	
+            
+            cin>>choice;
+            switch (choice) {
+            	case 1:
+					sep();
+					sistema.persona();
+                	break;	
+                case 2:
+                	sep();
+                	sistema.listPatients();
+                    break;
+                case 3:
+                	sep();
+                    savePatientsToFile(sistema.persona_paciente, "datos_pacientes.txt");
+                    cout << "The data of the patient has been succesfully added into 'datos_patients.txt'" << endl;
+                    break;
+                case 4:
+                	sep();
+                    cout << "Exiting system." << endl;
+                    return 0;
+                    
+                    case 5:         
+					   	    MessageBox(0,"Changing User","Message",MB_OK);       		
+                		  loginvalue = login();
+                		break;
+                default:
+                	sep();
+                	cout<<"No valid option, try again"<<endl;
+			}	
+        
+	}
+	if (loginvalue == 3 )
+	 	{
+	
+        	sep();
+            cout << "Options:" << endl;
+            cout << "1. Add appointments: " << endl;
+            cout << "2. See appointments: " << endl;	
+            cout << "3. Exit" << endl;	
+            cout << "4. Switch user"<< endl;
+            
+            cin>>choice;
+            switch (choice) {
+            	case 1:
+					sep();
+                	apps();
+                	break;
+                case 2:
+                	sep();
+                	seeapps();
+                	sep();
+                	read_patients_apps();
+                	break;
+                case 3:
+                	sep();
+                    cout << "Exiting system." << endl;
+                    return 0;
+                    case 4:         
+					   	    MessageBox(0,"Changing User","Message",MB_OK);       		
+                		  loginvalue = login();
+                		break;
+                default:
+                	sep();
+                	cout<<"No valid option, try again"<<endl;
+			}	
+        
+	}
+	if (loginvalue == 4 )
+	 	{
+	
+        	sep();
+            cout << "Options:" << endl;
+            cout << "1. Make an appointment: " << endl;
+            cout << "2. Exit" << endl;	
+            cout << "3. Switch user";
+            
+            cin>>choice;
+            switch (choice) {
+            	case 1:
+					sep();
+                	makeapp();
+                	break;
+                case 2: 
+                	sep();
+                    cout << "Exiting system." << endl;
+                    return 0;
+                    case 3:         
+					   	    MessageBox(0,"Changing User","Message",MB_OK);       		
+                		  loginvalue = login();
+                		break;
+                default:
+                	sep();
+                	cout<<"No valid option, try again"<<endl;
+			}	
+        
+	}
+    return 0;
+}
+}
