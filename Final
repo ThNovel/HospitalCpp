@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <Windows.h>
 using namespace std;
 
 string user_input;
@@ -119,10 +120,10 @@ public:
         cout << "Enter the conclusion of the case: ";
         cin>>conclusion;
         //cin.ignore();
-        cout << "Enter the cuantity of money that was spent on the client: $";
+        cout << "Enter the quantity of money that was spent on the client: $";
         cin>>moneySpent;
         //cin.ignore();
-        cout << "Enter the cuantity of money the client spent: $";
+        cout << "Enter the quantity of money the client spent: $";
         cin>>moneyEarned;
         //cin.ignore();
         gastos_ganancias(moneySpent, moneyEarned);
@@ -150,6 +151,7 @@ public:
 
 // Función para gestionar el inicio de sesión
 int login(){
+	
     while (login_attempt < 3)
     {
         cout<<"User: ";
@@ -180,8 +182,9 @@ int login(){
             login_attempt++;
         }
         // no es necesario el if porque ya tenes la declaracion en la funcion while
-       if(login_attempt >3){
-            cout<<"Many failed attempts, muere (figurativamente)."<<endl;
+       if(login_attempt >=3){
+       		MessageBox(0,"Many failed attempts","Login Failed",MB_OK|MB_ICONWARNING);
+            //cout<<", muere (figurativamente)."<<endl;
              // Esta es una funcion que para que el programa
             return 0;
            break;
@@ -217,7 +220,7 @@ void savePatientsToFile(const vector<Paciente>& pacientes, const string& filenam
     outFile.close();
 }
 void apps(){
-	
+	string date_hospital;
 	fout.open("apps.txt");
 	while(fout){
 		cout<<"Enter the name; "<<endl;
@@ -233,6 +236,12 @@ void apps(){
 		if(pat_time=="0")
 			break;
 		fout<<pat_time<<endl;	
+		
+		cout<<"Enter the date; "<<endl;
+		cin>>date_hospital;
+		if(date_hospital=="0")
+			break;
+		fout<<date_hospital<<endl;	
 	}
 	fout.close();
 	
@@ -267,19 +276,23 @@ void seeapps(){
 	fin.open("apps.txt");
 	
 int cont =0;
-		   while(getline(fin,mytext)){
-		if (cont == 0){
-					   cout<<"Name of the patient:"<<mytext<<endl;
-					   cont = 1;
-		}else{
-		   cout<<"Time the appointment has been scheduled:"<<mytext<<endl;
-		   cont = 0;
-	}
+		while(getline(fin,mytext)){
+			if (cont == 0){
+						   cout<<"Name of the patient:"<<mytext<<endl;
+						   cont = 1;
+			}else if(cont == 1){
+			   cout<<"Time the appointment has been scheduled:"<<mytext<<endl;
+			   cont = 2;
+			}else if(cont == 2){
+				cout<<"The date the appointment has been scheduled is: "<<mytext<<endl;
+				cont = 0;
+			}
 	}
 		fin.close();
 }
 void makeapp(){
 	int pain;
+	string pat_date;
 	string wp; // What happened
 	fout.open("patients_apps.txt");
 	while(fout){
@@ -292,11 +305,18 @@ void makeapp(){
 		
 		cout<<"From a scale from 1-10, being 1 not too much pain and 10 unbearable pain:\nWhat would you rate your pain?: "<<endl;
 		cin>>pain;
-		cout<<"Select the hour of time for the appointment: ";
+		cout<<"Type the hour of time for the appointment: ";
 		cin>>pat_time;
 		if(pat_time=="0")
 			break;
-		fout<<pat_time<<endl;	
+		fout<<pat_time<<endl;
+		
+		
+		cout<<"Type the date for the appointment: ";
+		cin>>pat_date;
+		if(pat_date=="0")
+			break;
+		fout<<pat_date<<endl;	
 		cout<<"Thank you very much for your choice, in Mercy Hospital the priority is always you."<<endl;
 		break;
 	}
@@ -305,24 +325,26 @@ void makeapp(){
 void read_patients_apps(){
 cout<<"This appointments are from the website..."<<endl;
 fin.open("patients_apps.txt");
+
 	
 int cont =0;
-		   while(getline(fin,mytext)){
-		if (cont == 0){
-					   cout<<"The patient : ->"<<mytext<<"<- Has made an appointment at : ";
-					   cont = 1;
-		}
-		else{
-		   cout<<""<<mytext<<endl;
-		   cont = 0;
-		}
+		while(getline(fin,mytext)){
+			if (cont == 0){
+				 cout<<"The patient : ->"<<mytext<<"<- Has made an appointment at : ";
+				 cont = 1;
+			}else if(cont == 1){
+			   cout<<""<<mytext<<endl;
+			   cont = 2;
+			}else if(cont == 2){
+				cout<<"The date the appointment has been scheduled is: "<<mytext<<endl;
+				cont = 0;
+			}
 	}
 		fin.close();
 }
 int main() {
     int choice;
     SistemaPaciente sistema;
-  
     int loginvalue = login(); 
 	//adadmcout<<"\n"<<loginvalue<< endl;
   	if (loginvalue == 1 )
@@ -372,8 +394,7 @@ int main() {
                 	break;
                 default:
                 	sep();
-                    cout << "No valid option, try again." << endl;
-                    
+                    cout << "No valid option, try again." << endl;      
             }
         }		
 	  }
@@ -386,7 +407,6 @@ int main() {
             cout << "2. List patients" << endl;	
             cout << "3. Save patients to a file: " << endl;
             cout << "4. Exit" << endl;	
-            
             cin>>choice;
             switch (choice) {
             	case 1:
@@ -457,7 +477,7 @@ int main() {
 					sep();
                 	makeapp();
                 	break;
-                case 2: 
+                case 2:
                 	sep();
                     cout << "Exiting system." << endl;
                     return 0;
@@ -469,4 +489,3 @@ int main() {
 	}
     return 0;
 }
-
